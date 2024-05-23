@@ -1,0 +1,6 @@
+*checkpoints*
+*.log*
+*.h5
+*pycache*
+.phare
+*.mp4
