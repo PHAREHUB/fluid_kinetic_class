@@ -137,7 +137,7 @@ def main():
     Te = float(sys.argv[1])
     Ti = float(sys.argv[2])
     
-    config(diagdir=f"sp_{Ti}_{Te}", Te=Te, Ti=Ti)
+    config(diagdir=f"sp_{Te}_{Ti}", Te=Te, Ti=Ti)
     
     Simulator(gv.sim).run()
     gv.sim = None
