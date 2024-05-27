@@ -36,7 +36,7 @@ def bz(x):
 
 
 def T(x):
-    return 0.01
+    return 0.125**2
 
 
 def vWeak(x):
