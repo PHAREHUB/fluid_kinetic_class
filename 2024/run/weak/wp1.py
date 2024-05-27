@@ -89,7 +89,7 @@ def config(**kwargs):
                                    **vvv}
                         )
 
-    ElectronModel(closure="isothermal", Te=0.05)
+    ElectronModel(closure="isothermal", Te=kwargs.get("Te", 0.))
 
 
     sim = ph.global_vars.sim
@@ -112,7 +112,6 @@ def config(**kwargs):
             compute_timestamps=timestamps,
             )
 
-    
     for quantity in ['domain']:  # , 'levelGhost', 'patchGhost']:
         ParticleDiagnostics(quantity=quantity,
                             compute_timestamps=timestamps,
@@ -124,9 +123,16 @@ def config(**kwargs):
 
 def main():
     from pyphare.cpp import cpp_lib
+    import sys
+
     cpp = cpp_lib()
 
-    config(diagdir="wp1")
+    if len(sys.argv)>1:
+        Te = float(sys.argv[1])
+    else:
+        Te = 0.
+    diagdir = f"wp_{Te}"
+    config(diagdir=diagdir, Te=Te)
     Simulator(gv.sim).run()
     gv.sim = None
 
