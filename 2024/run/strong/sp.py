@@ -19,64 +19,65 @@ mpl.use('Agg')
 
 from tests.diagnostic import all_timestamps
 
-def density(x):
-    return 1.
-
-
-def bx(x):
-    return 1.
-
-
-def by(x):
-    return 0.
-
-
-def bz(x):
-    return 0.0
-
-
-def T(x):
-    return 0.005
-
-
-def vx(x):
-    from pyphare.pharein.global_vars import sim
-    L = sim.simulation_domain()[0]
-    return np.sin(2*np.pi/L*x)*1.5
-
-
-def vy(x):
-    return 0.
-
-
-def vz(x):
-    return 0.
-
-
-def vthx(x):
-    return T(x)
-
-
-def vthy(x):
-    return T(x)
-
-
-def vthz(x):
-    return T(x)
-
-vvv = {"vbulkx": vx,
-       "vbulky": vy,
-       "vbulkz": vz,
-       "vthx": vthx,
-       "vthy": vthy,
-       "vthz": vthz }
 
 
 def config(**kwargs):
 
+    def density(x):
+        return 1.
+    
+    
+    def bx(x):
+        return 1.
+    
+    
+    def by(x):
+        return 0.
+    
+    
+    def bz(x):
+        return 0.0
+    
+    
+    def T(x):
+        return kwargs.get("Ti", 0.005)
+    
+    
+    def vx(x):
+        from pyphare.pharein.global_vars import sim
+        L = sim.simulation_domain()[0]
+        return np.sin(2*np.pi/L*x)*1.5
+    
+    
+    def vy(x):
+        return 0.
+    
+    
+    def vz(x):
+        return 0.
+    
+    
+    def vthx(x):
+        return np.sqrt(T(x))
+    
+    
+    def vthy(x):
+        return np.sqrt(T(x))
+    
+    
+    def vthz(x):
+        return np.sqrt(T(x))
+    
+    vvv = {"vbulkx": vx,
+           "vbulky": vy,
+           "vbulkz": vz,
+           "vthx": vthx,
+           "vthy": vthy,
+           "vthz": vthz }
+    
     Simulation(
         time_step=0.001,
-        final_time=20.,
+        final_time=40.,
         boundary_types="periodic",
         hyper_resistivity=0.02 ,
         cells=512,
@@ -97,7 +98,7 @@ def config(**kwargs):
                                   **vvv}
                         )
 
-    ElectronModel(closure="isothermal", Te=0.005)
+    ElectronModel(closure="isothermal", Te=kwargs.get("Te", 0.005))
 
 
     sim = ph.global_vars.sim
@@ -113,7 +114,7 @@ def config(**kwargs):
         )
 
 
-    for quantity in ["density", "bulkVelocity"]:
+    for quantity in ["density", "bulkVelocity", "pressure_tensor"]:
         FluidDiagnostics(
             quantity=quantity,
             write_timestamps=timestamps,
@@ -130,9 +131,14 @@ def config(**kwargs):
 
 def main():
     from pyphare.cpp import cpp_lib
+    import sys
     cpp = cpp_lib()
 
-    config(diagdir="sp1")
+    Te = float(sys.argv[1])
+    Ti = float(sys.argv[2])
+    
+    config(diagdir=f"sp_{Ti}_{Te}", Te=Te, Ti=Ti)
+    
     Simulator(gv.sim).run()
     gv.sim = None
 
