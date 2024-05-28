@@ -22,7 +22,7 @@ def densityMain(x):
     return 1.0
 
 def densityBeam(x):
-    return 0.2
+    return 0.01
 
 def bx(x):
     return 1.0
@@ -34,16 +34,16 @@ def bz(x):
     return 0.0
 
 def vB(x):
-    return 2.5
+    return 5.0
 
 def v0(x):
     return 0.0
 
 def vthMain(x):
-    return np.sqrt(0.05)
+    return np.sqrt(0.1)
 
 def vthBeam(x):
-    return np.sqrt(1.0)
+    return np.sqrt(0.1)
 
 
 vMain = {
@@ -70,7 +70,7 @@ def config(**kwargs):
         final_time=100,
         time_step=0.01,
         boundary_types="periodic",
-        cells=200,  # what is the k of the most unstable ES mode ? gary has the answer ?
+        cells=165,  # what is the k of the most unstable ES mode ? gary has the answer ?
         dl=0.2,
         hyper_resistivity=0.01,
         diag_options={
@@ -85,11 +85,11 @@ def config(**kwargs):
         bx=bx,
         by=by,
         bz=bz,
-        main={"charge": 1, "density": densityMain, "nbr_part_per_cell": 200, **vMain},
-        beam={"charge": 1, "density": densityBeam, "nbr_part_per_cell": 200, **vBulk},
+        main={"charge": 1, "density": densityMain, "nbr_part_per_cell": 100, **vMain},
+        beam={"charge": 1, "density": densityBeam, "nbr_part_per_cell": 100, **vBulk},
     )
 
-    ph.ElectronModel(closure="isothermal", Te=0.00025)
+    ph.ElectronModel(closure="isothermal", Te=0.0)
 
     timestamps = np.arange(0, sim.final_time, 0.1)
 
@@ -111,7 +111,7 @@ def config(**kwargs):
 
 
 def main():
-    Simulator(config(diagdir="ib1")).run()
+    Simulator(config(diagdir="ib2")).run()
 
 
 if __name__ == "__main__":
