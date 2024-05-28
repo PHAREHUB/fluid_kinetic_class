@@ -77,11 +77,11 @@ def config(**kwargs):
     
     Simulation(
         time_step=0.001,
-        final_time=40.,
+        final_time=10.,
         boundary_types="periodic",
         hyper_resistivity=0.02 ,
-        cells=512,
-        dl=0.25,
+        cells=64,
+        dl=0.2,
         diag_options={"format": "phareh5",
                       "options": {"dir": kwargs["diagdir"],
                                   "mode":"overwrite"}
@@ -94,7 +94,7 @@ def config(**kwargs):
                          bz=bz,
                          protons={"charge": 1,
                                   "density": density,
-                                  "nbr_part_per_cell": 200,
+                                  "nbr_part_per_cell": 1000,
                                   **vvv}
                         )
 
