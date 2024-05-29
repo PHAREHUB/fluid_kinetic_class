@@ -11,6 +11,10 @@ Training module for doctoral students, offered regularly by the École Doctorale
 - **Information on ADUM:** [https://adum.fr](https://adum.fr/)
 
 
+<img width="930" alt="image" src="https://github.com/PHAREHUB/fluid_kinetic_class/assets/3200931/86a01caf-822b-4819-a792-a690abac1dc7">
+
+
+
 ## objective:
 
 Astrophysical plasmas, like those used in laboratory physics, are often modeled by "fluid" theories, i.e. based 
